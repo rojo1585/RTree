@@ -1,36 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <IsPackable>true</IsPackable> 
-    <PackageId>RED.RTree</PackageId>
-    <Version>1.0.0-alpha</Version>
-    <Authors>Rojo</Authors>
-    <PackageTags>binary-tree data-structure</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsPackable>true</IsPackable>
+		<PackageId>RED.RTree</PackageId>
+		<Version>1.0.0-alpha</Version>
+		<Authors>Rojo</Authors>
+		<PackageTags>binary-tree data-structure</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<IncludeSymbols>false</IncludeSymbols>
+		<IncludeSource>false</IncludeSource>
+		
+		<PackageReleaseNotes>
+			-Generic implementation of a binary search tree
+		</PackageReleaseNotes>
+		<PackageIcon>icon.png</PackageIcon>
+	</PropertyGroup>
 
-    <PackageReleaseNotes>
-      -Generic implementation of a binary search tree
-    </PackageReleaseNotes>
-    <PackageIcon>icon.png</PackageIcon>
-  </PropertyGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="icon.png" />
+	</ItemGroup>
 
- <ItemGroup>
-    <EmbeddedResource Include="icon.png" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Include=".\README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include=".\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
 
- <ItemGroup>
-    <None Update="icon.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="icon.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
 </Project>
