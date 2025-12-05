@@ -5,19 +5,31 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<IsPackable>true</IsPackable>
+		
 		<PackageId>RED.RTree</PackageId>
 		<Version>1.0.0-alpha</Version>
 		<Authors>Rojo</Authors>
 		<PackageTags>binary-tree data-structure</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<IncludeSymbols>false</IncludeSymbols>
-		<IncludeSource>false</IncludeSource>
-		
-		<PackageReleaseNotes>
-			-Generic implementation of a binary search tree
-		</PackageReleaseNotes>
 		<PackageIcon>icon.png</PackageIcon>
+
+		<DebugType>portable</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<RepositoryUrl>https://github.com/RED-RTree</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+
+		<Deterministic>true</Deterministic>
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+
+		<PackageReleaseNotes>
+			- Generic implementation of a binary search tree
+		</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -33,6 +45,9 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 	</ItemGroup>
 
 </Project>
