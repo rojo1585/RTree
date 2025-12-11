@@ -88,6 +88,28 @@ public class BTree<T> : ITree<T> where T : IComparable<T>
         }
     }
 
+    private void SplitChild(BTreeNode<T> parent, int childIndex)
+    {
+        BTreeNode<T> y = parent.Children[childIndex]!;
+        BTreeNode<T> z = new() { IsLeaf = y.IsLeaf };
+
+        int medianIndex = MaxKeys / 2;
+
+        z.Keys.AddRange(y.Keys.GetRange(medianIndex + 1, MaxKeys - medianIndex - 1));
+
+        if (!y.IsLeaf)
+            z.Children.AddRange(y.Children.GetRange(medianIndex + 1, _order - (medianIndex + 1)));
+
+        T medianKey = y.Keys[medianIndex];
+        parent.Keys.Insert(childIndex, medianKey); 
+
+        parent.Children.Insert(childIndex + 1, z);
+
+        y.Keys.RemoveRange(medianIndex, y.Keys.Count - medianIndex);
+        if (!y.IsLeaf)
+            y.Children.RemoveRange(medianIndex + 1, y.Children.Count - (medianIndex + 1));
+
+    }
     public IEnumerator<T> GetEnumerator() => TraverseInOrder().GetEnumerator();
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
 }
