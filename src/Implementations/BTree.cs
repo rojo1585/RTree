@@ -26,7 +26,22 @@ public class BTree<T> : ITree<T> where T : IComparable<T>
 
     public void Insert(T value)
     {
-        throw new NotImplementedException();
+        BTreeNode<T> r = _root!;
+
+        if (r.Keys.Count == MaxKeys)
+        {
+            BTreeNode<T> s = new() { IsLeaf = false };
+            s.Children.Add(r);
+            _root = s;
+
+            SplitChild(s, 0);
+
+            InsertNonFull(s, value);
+    }
+        else
+        {
+            InsertNonFull(r, value);
+        }
     }
 
     public bool Contains(T value)
@@ -109,6 +124,38 @@ public class BTree<T> : ITree<T> where T : IComparable<T>
         if (!y.IsLeaf)
             y.Children.RemoveRange(medianIndex + 1, y.Children.Count - (medianIndex + 1));
 
+    }
+
+    private void InsertNonFull(BTreeNode<T> node, T value)
+    {
+        int i = node.Keys.Count - 1;
+
+        if (node.IsLeaf)
+        {
+            while (i >= 0 && value.CompareTo(node.Keys[i]) < 0)
+                i--;
+
+            node.Keys.Insert(i + 1, value);
+        }
+        else
+        {
+            while (i >= 0 && value.CompareTo(node.Keys[i]) < 0)
+                i--;
+
+            int childIndex = i + 1;
+
+            BTreeNode<T> child = node.Children[childIndex]!;
+
+            if (child.Keys.Count == MaxKeys)
+            {
+                SplitChild(node, childIndex);
+
+                if (value.CompareTo(node.Keys[childIndex]) > 0)
+                    childIndex++;
+            }
+
+            InsertNonFull(node.Children[childIndex]!, value);
+        }
     }
     public IEnumerator<T> GetEnumerator() => TraverseInOrder().GetEnumerator();
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
