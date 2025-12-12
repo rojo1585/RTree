@@ -21,18 +21,7 @@ internal class BTreeNode<T> where T : IComparable<T>
     /// <param name="value">La clave a buscar.</param>
     /// <returns>
     /// Si la clave se encuentra, retorna su índice (>= 0).
-    /// Si la clave NO se encuentra, retorna el índice donde debería insertarse, representado como el complemento bit a bit (~índice). 
-    /// Este valor también indica el índice del puntero al nodo hijo que debemos seguir.
     /// </returns>
-    public int FindKeyIndex(T value)
-    {
-        int index = Keys.BinarySearch(value);
+    public int FindKeyIndex(T value)=> Keys.BinarySearch(value);
 
-        if (index >= 0)
-        {
-            return index;
-        }
-
-        return ~index;
-    }
 }
