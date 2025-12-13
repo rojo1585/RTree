@@ -7,7 +7,7 @@
 		<IsPackable>true</IsPackable>
 		
 		<PackageId>RED.RTree</PackageId>
-		<Version>1.0.0-alpha</Version>
+		<Version>1.0.1-alpha</Version>
 		<Authors>Rojo</Authors>
 		<PackageTags>binary-tree data-structure</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
