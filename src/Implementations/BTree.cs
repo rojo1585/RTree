@@ -2,7 +2,7 @@
 
 namespace RTree.Implementations;
 
-public class BTree<T> : ITree<T> where T : IComparable<T>
+public partial class BTree<T> : ITree<T> where T : IComparable<T>
 {
     private BTreeNode<T>? _root;
     private readonly int _order;
@@ -18,7 +18,7 @@ public class BTree<T> : ITree<T> where T : IComparable<T>
 
         _root = new BTreeNode<T> { IsLeaf = true };
     }
-
+    public bool Contains(T value) => TryGetValue(value, out _);
     public void Insert(T value)
     {
         BTreeNode<T> r = _root!;
@@ -37,30 +37,6 @@ public class BTree<T> : ITree<T> where T : IComparable<T>
         {
             InsertNonFull(r, value);
         }
-    }
-
-    public bool Contains(T value)
-    {
-        return Search(_root, value);
-    }
-
-    private bool Search(BTreeNode<T>? node, T value)
-    {
-        if (node == null)
-            return false;
-
-        int index = node.FindKeyIndex(value);
-
-        if (index >= 0)
-            return true;
-
-        if (!node.IsLeaf)
-        {
-            int childIndex = ~index;
-            return Search(node.Children[childIndex], value);
-        }
-
-        return false;
     }
 
     public void Delete(T value)
@@ -119,7 +95,7 @@ public class BTree<T> : ITree<T> where T : IComparable<T>
             z.Children.AddRange(y.Children.GetRange(medianIndex + 1, _order - (medianIndex + 1)));
 
         T medianKey = y.Keys[medianIndex];
-        parent.Keys.Insert(childIndex, medianKey); 
+        parent.Keys.Insert(childIndex, medianKey);
 
         parent.Children.Insert(childIndex + 1, z);
 
@@ -295,4 +271,6 @@ public class BTree<T> : ITree<T> where T : IComparable<T>
             DeleteRec(node.Children[childIndex]!, value);
         }
     }
+
+   
 }
