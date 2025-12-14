@@ -22,9 +22,11 @@ jobs:
 
       - run: |
           VERSION="${BASE_VERSION}-alpha.${{ github.run_number }}"
-          dotnet pack -c Release -p:PackageVersion=$VERSION
+          dotnet pack RTree.sln -c Release \
+          -p:PackageVersion=$VERSION \
+          -o ./artifacts
 
       - run: |
-          dotnet nuget push bin/Release/*.nupkg \
+          dotnet nuget push ./artifacts/*.nupkg \
             --api-key ${{ secrets.NUGET_API_KEY }} \
             --source https://api.nuget.org/v3/index.json
