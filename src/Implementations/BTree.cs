@@ -21,6 +21,15 @@ public partial class BTree<T> : ITree<T> where T : IComparable<T>
     public bool Contains(T value) => TryGetValue(value, out _);
     public void Insert(T value)
     {
+        if (_root == null)
+        {
+            _root = new BTreeNode<T> { IsLeaf = true };
+            _root.Keys.Add(value);
+            Count= 1;
+            Height = 1;
+            return;
+        }
+
         BTreeNode<T> r = _root!;
 
         if (r.Keys.Count == MaxKeys)
@@ -30,29 +39,39 @@ public partial class BTree<T> : ITree<T> where T : IComparable<T>
             _root = s;
 
             SplitChild(s, 0);
-
             InsertNonFull(s, value);
+            Height++;
         }
         else
         {
             InsertNonFull(r, value);
         }
+
+        Count++;
     }
 
     public void Delete(T value)
     {
         if (_root == null) return;
 
+        if (!Contains(value)) return;
+
         DeleteRec(_root, value);
 
         if (_root.Keys.Count == 0)
         {
             if (_root.IsLeaf)
+            {
                 _root = null;
+                Height = 0;
+            }
             else
-                _root = _root.Children.FirstOrDefault();
-
+            {
+                _root = _root.Children[0]!;
+                Height--;
+            }
         }
+        Count--;
     }
 
     public IEnumerable<T> TraverseInOrder()
