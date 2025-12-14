@@ -5,7 +5,7 @@ on:
     branches: [ development ]
 
 env:
-  BASE_VERSION: ${{ vars.BASE_VERSION }}
+  BASE_VERSION: ${{ secrets.BASE_VERSION }}
 
 jobs:
   publish:
