@@ -54,4 +54,16 @@
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+		<Compile Update="Implementations/BTree.Collection.cs">
+			<DependentUpon>Implementations/BTree.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Implementations/BTree.Search.cs">
+			<DependentUpon>Implementations/BTree.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Implementations/BTree.State.cs">
+			<DependentUpon>Implementations/BTree.cs</DependentUpon>
+		</Compile>
+	</ItemGroup>
 </Project>
