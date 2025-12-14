@@ -1,0 +1,30 @@
+name: NuGet RC
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  BASE_VERSION: ${{ vars.BASE_VERSION }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - run: dotnet restore
+      - run: dotnet build -c Release --no-restore
+
+      - run: |
+          VERSION="${BASE_VERSION}-rc.${{ github.run_number }}"
+          dotnet pack -c Release -p:PackageVersion=$VERSION
+
+      - run: |
+          dotnet nuget push bin/Release/*.nupkg \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source https://api.nuget.org/v3/index.json
