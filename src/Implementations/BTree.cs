@@ -21,6 +21,8 @@ public partial class BTree<T> : ITree<T> where T : IComparable<T>
     public bool Contains(T value) => TryGetValue(value, out _);
     public void Insert(T value)
     {
+        // fix if root is null, create a new root
+
         BTreeNode<T> r = _root!;
 
         if (r.Keys.Count == MaxKeys)
@@ -42,6 +44,8 @@ public partial class BTree<T> : ITree<T> where T : IComparable<T>
     public void Delete(T value)
     {
         if (_root == null) return;
+
+        if (!Contains(value)) return;
 
         DeleteRec(_root, value);
 
