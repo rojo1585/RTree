@@ -155,9 +155,7 @@ public partial class BTree<T> : ITree<T> where T : IComparable<T>
             InsertNonFull(node.Children[childIndex]!, value);
         }
     }
-    public IEnumerator<T> GetEnumerator() => TraverseInOrder().GetEnumerator();
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
-
+    
     private T GetPredecessor(BTreeNode<T> node, int index)
     {
         BTreeNode<T> current = node.Children[index]!;
