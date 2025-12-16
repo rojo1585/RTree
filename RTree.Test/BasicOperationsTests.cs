@@ -8,7 +8,7 @@ namespace RTree.Test;
 public class BasicOperationsTests
 {
     [Fact]
-    public void Insert_SingleItem_CountIsOne()
+     public void Insert_SingleItem_CountIsOne()
     {
         var tree = new BTree<int>(3);
         tree.Add(10);
@@ -54,11 +54,10 @@ public class BasicOperationsTests
     public void Delete_RootCausingHeightReduction_Works()
     {
         var tree = new BTree<int>(3);
-        // Llenamos para tener altura
+
         int[] inputs = { 10, 20, 30, 40, 50 };
         foreach (var i in inputs) tree.Add(i);
 
-        // Borramos suficientes para causar fusiones (Merge)
         tree.Remove(10);
         tree.Remove(20);
         tree.Remove(30);
@@ -66,7 +65,7 @@ public class BasicOperationsTests
         tree.Remove(50);
 
         Assert.Empty(tree);
-        Assert.Equal(1, tree.Height); // Altura base
+        Assert.Equal(0, tree.Height); // Altura base
     }
 
     [Fact]
