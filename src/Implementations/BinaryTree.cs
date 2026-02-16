@@ -168,8 +168,4 @@ public class BinaryTree<T>(DuplicateHandling _duplicateHandling = DuplicateHandl
         return TraverseInOrder().GetEnumerator();
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
 }

@@ -155,9 +155,7 @@ public partial class BTree<T> : ITree<T> where T : IComparable<T>
             InsertNonFull(node.Children[childIndex]!, value);
         }
     }
-    public IEnumerator<T> GetEnumerator() => TraverseInOrder().GetEnumerator();
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
-
+    
     private T GetPredecessor(BTreeNode<T> node, int index)
     {
         BTreeNode<T> current = node.Children[index]!;
@@ -235,59 +233,82 @@ public partial class BTree<T> : ITree<T> where T : IComparable<T>
     {
         if (index != 0 && node.Children[index - 1]!.Keys.Count > MinKeys)
             BorrowFromPrevious(node, index);
-        else if (index != node.Keys.Count && node.Children[index + 1]!.Keys.Count > MinKeys)
+        else if (index < node.Children.Count - 1 && node.Children[index + 1]!.Keys.Count > MinKeys)
             BorrowFromNext(node, index);
         else
         {
-            if (index != node.Keys.Count)
-                Merge(node, index);
-            else
-                Merge(node, index - 1);
+            // Merge with sibling
+            if (index != node.Children.Count - 1)
+                Merge(node, index);  // Merge with right sibling
+            else if (index > 0)
+                Merge(node, index - 1);  // Merge with left sibling
         }
     }
 
     private void DeleteRec(BTreeNode<T> node, T value)
     {
-        int index = node.FindKeyIndex(value);
+        // ✅ CAMBIO 1: Usar BinarySearch para O(log MaxKeys)
+        int index = node.Keys.BinarySearch(value);
 
         if (index >= 0)
         {
+            // ✅ CAMBIO 2: Encontrado exactamente en la posición 'index'
             if (node.IsLeaf)
+            {
+                // Case 1: value está en una hoja
                 node.Keys.RemoveAt(index);
+            }
             else
             {
-                if (node.Children[index]!.Keys.Count > MinKeys)
-                {
-                    T pred = GetPredecessor(node, index);
-                    node.Keys[index] = pred;
-                    DeleteRec(node.Children[index]!, pred);
-                }
-                else if (node.Children[index + 1]!.Keys.Count > MinKeys)
-                {
-                    T succ = GetSuccessor(node, index);
-                    node.Keys[index] = succ;
-                    DeleteRec(node.Children[index + 1]!, succ);
-                }
-                else
-                {
-                    Merge(node, index);
-                    DeleteRec(node.Children[index]!, value);
-                }
+                // Case 2: value está en un nodo interno
+                DeleteInternalNode(node, index, value);
             }
+        }
+        else if (!node.IsLeaf)
+        {
+            // ✅ CAMBIO 3: Usar ~index para obtener donde descender
+            // BinarySearch devuelve negativo cuando no encuentra
+            // ~index nos da la posición donde debería estar
+            int childIndex = ~index;
+
+            // ✅ CAMBIO 4: Llenar el hijo ANTES de descender
+            if (node.Children[childIndex]!.Keys.Count < MinKeys + 1)
+            {
+                Fill(node, childIndex);
+
+                // ✅ CAMBIO 5: Recalcular después de Fill
+                // La estructura del árbol cambió, recalculamos donde descender
+                index = node.Keys.BinarySearch(value);
+                childIndex = ~index;
+            }
+
+            DeleteRec(node.Children[childIndex]!, value);
+        }
+    }
+
+    private void DeleteInternalNode(BTreeNode<T> node, int i, T value)
+    {
+        T key = node.Keys[i];
+
+        if (node.Children[i]!.Keys.Count > MinKeys)
+        {
+            // Case 2a: El hijo izquierdo tiene más de MinKeys claves
+            T pred = GetPredecessor(node, i);
+            node.Keys[i] = pred;
+            DeleteRec(node.Children[i]!, pred);
+        }
+        else if (node.Children[i + 1]!.Keys.Count > MinKeys)
+        {
+            // Case 2b: El hijo derecho tiene más de MinKeys claves
+            T succ = GetSuccessor(node, i);
+            node.Keys[i] = succ;
+            DeleteRec(node.Children[i + 1]!, succ);
         }
         else
         {
-            int childIndex = ~index;
-
-            if (node.IsLeaf)
-                return;
-
-            if (node.Children[childIndex]!.Keys.Count == MinKeys)
-                Fill(node, childIndex);
-
-            index = node.FindKeyIndex(value);
-            childIndex = ~index;
-            DeleteRec(node.Children[childIndex]!, value);
+            // Case 2c: Ambos hijos tienen MinKeys claves; fusionarlos
+            Merge(node, i);
+            DeleteRec(node.Children[i]!, value);
         }
     }
 

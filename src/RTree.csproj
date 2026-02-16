@@ -9,7 +9,7 @@
 		<PackageId>RED.RTree</PackageId>
 		<Version>0.0.0</Version>
 		<Authors>Rojo</Authors>
-		<PackageTags>binary-tree data-structure</PackageTags>
+		<PackageTags>b-tree binary-tree data-structure</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageIcon>icon.png</PackageIcon>
@@ -26,9 +26,13 @@
 
 		<Deterministic>true</Deterministic>
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-
 		<PackageReleaseNotes>
+			- Generic in-memory B-Tree implementation (efficient for large datasets).
 			- Generic implementation of a binary search tree
+			- Full implementation of ICollection&lt;T&gt; (Add, Remove, Clear, CopyTo).
+			- Fully compatible with LINQ (IEnumerable&lt;T&gt;).
+			- Advanced features: Range Search and Order customization.
+			- O(log n) complexity for Insert, Delete, and Search.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
@@ -50,4 +54,16 @@
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+		<Compile Update="Implementations/BTree.Collection.cs">
+			<DependentUpon>Implementations/BTree.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Implementations/BTree.Search.cs">
+			<DependentUpon>Implementations/BTree.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Implementations/BTree.State.cs">
+			<DependentUpon>Implementations/BTree.cs</DependentUpon>
+		</Compile>
+	</ItemGroup>
 </Project>
